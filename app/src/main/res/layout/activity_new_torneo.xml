@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".CrearTorneoActivity">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="28dp"
+                android:textStyle="bold"
+                android:text="CREA TU NUEVO TORNEO" />
+
+            <EditText
+                android:id="@+id/etNombreTorneo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Nombre del Torneo"
+                android:layout_marginBottom="16dp"/>
+
+            <EditText
+                android:id="@+id/etLocalidad"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Localidad"
+                android:layout_marginBottom="16dp"/>
+
+            <EditText
+                android:id="@+id/etParticipantes"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Número de Participantes"
+                android:inputType="number"
+                android:layout_marginBottom="16dp"/>
+
+            <EditText
+                android:id="@+id/etFechaInicioInscripcion"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Fecha de inicio de inscripción"
+                android:inputType="text"
+                android:focusable="false"
+                android:layout_marginBottom="16dp"/>
+
+            <EditText
+                android:id="@+id/etFechaFinInscripcion"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Fecha de fin de inscripción"
+                android:inputType="text"
+                android:focusable="false"
+                android:layout_marginBottom="16dp"/>
+
+            <EditText
+                android:id="@+id/etFechaComienzo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Fecha de Comienzo"
+                android:focusable="false"
+                android:layout_marginBottom="16dp"/>
+
+            <EditText
+                android:id="@+id/etFechaFin"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Fecha de Fin"
+                android:focusable="false"
+                android:layout_marginBottom="16dp"/>
+
+            <Spinner
+                android:id="@+id/spinnerDeporte"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"/>
+
+            <fragment
+                android:id="@+id/mapFragment"
+                android:name="com.google.android.gms.maps.SupportMapFragment"
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                android:layout_marginBottom="16dp"
+                android:layout_below="@id/spinnerDeporte"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"/>
+
+            <Button
+                android:id="@+id/btnGuardar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Guardar"
+                android:textColor="@color/white"
+                android:background="@color/colorBotonRegistro"
+                android:layout_gravity="center_horizontal"/>
+        </LinearLayout>
+    </ScrollView>
+</RelativeLayout>

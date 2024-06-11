@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="16dp">
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/nombreTorneo"
+            android:textSize="20dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:layout_marginTop="8dp"
+            android:text="Nombre del Torneo" />
+
+        <TextView
+            android:id="@+id/localidad"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Localidad" />
+
+        <TextView
+            android:id="@+id/deporte"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Deporte" />
+
+        <TextView
+            android:id="@+id/fechaInicioIns"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Inicio Inscripción" />
+
+        <TextView
+            android:id="@+id/fechaFinIns"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Fin de Inscripción" />
+
+        <TextView
+            android:id="@+id/fechaInicio"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Fecha de Inicio" />
+
+        <TextView
+            android:id="@+id/fechaFin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Fecha de Fin" />
+
+    </LinearLayout>
+
+    <com.google.android.gms.maps.MapView
+        android:id="@+id/mapFragment"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_width="125dp"
+        android:layout_height="125dp"
+        android:layout_marginRight="1dp"
+        android:layout_marginTop="26dp"
+        android:visibility="visible"
+        card_view:liteMode="true" />
+
+</LinearLayout>
