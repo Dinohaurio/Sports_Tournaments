@@ -14,12 +14,12 @@
 
         <TextView
             android:id="@+id/nombreTorneo"
-            android:textSize="20dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text="Nombre del Torneo"
+            android:textSize="20sp"
             android:textStyle="bold"
-            android:layout_marginTop="8dp"
-            android:text="Nombre del Torneo" />
+            android:layout_marginTop="8dp" />
 
         <TextView
             android:id="@+id/localidad"
@@ -56,6 +56,16 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Fecha de Fin" />
+        <Button
+            android:id="@+id/btnPartidos"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:text="Partidos"
+            android:textColor="@color/white"
+            android:background="@color/colorBotonRegistro"
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="5dp"/>
 
     </LinearLayout>
 
@@ -68,5 +78,4 @@
         android:layout_marginTop="26dp"
         android:visibility="visible"
         card_view:liteMode="true" />
-
 </LinearLayout>

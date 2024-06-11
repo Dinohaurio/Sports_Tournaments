@@ -1,6 +1,7 @@
 package com.example.tfg_manuel_prieto
 
 import Torneo
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.LinearLayout
@@ -22,7 +23,7 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
-class TorneosParticipadosActivity: AppCompatActivity() {
+class TorneosParticipadosActivity : AppCompatActivity() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var torneosParticipadosAdapter: TorneosParticipadosAdapter
     private lateinit var auth: FirebaseAuth
@@ -35,7 +36,12 @@ class TorneosParticipadosActivity: AppCompatActivity() {
 
         recyclerView = findViewById(R.id.recyclerViewTorneosParticipados)
         recyclerView.layoutManager = LinearLayoutManager(this)
-        torneosParticipadosAdapter = TorneosParticipadosAdapter(torneosList)
+        torneosParticipadosAdapter = TorneosParticipadosAdapter(torneosList) { torneo ->
+            // Handle partidos button click
+            val intent = Intent(this, PartidosActivity::class.java)
+            intent.putExtra("TORNEO_ID", torneo.id)
+            startActivity(intent)
+        }
         recyclerView.adapter = torneosParticipadosAdapter
 
         auth = FirebaseAuth.getInstance()
@@ -73,12 +79,14 @@ class TorneosParticipadosActivity: AppCompatActivity() {
             .addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onDataChange(dataSnapshot: DataSnapshot) {
                     val torneo = dataSnapshot.getValue(Torneo::class.java)
-                    torneo?.let { torneosList.add(it) }
-                    torneosParticipadosAdapter.notifyDataSetChanged()
+                    torneo?.let {
+                        torneosList.add(it)
+                        torneosParticipadosAdapter.notifyDataSetChanged()
+                    }
                 }
 
                 override fun onCancelled(databaseError: DatabaseError) {
-                    Toast.makeText(this@TorneosParticipadosActivity, "Error al obtener los torneos", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@TorneosParticipadosActivity, "Error al obtener el torneo", Toast.LENGTH_SHORT).show()
                 }
             })
     }
