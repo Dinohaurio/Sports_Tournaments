@@ -12,10 +12,11 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 
 class PartidosActivity : AppCompatActivity() {
+
     private lateinit var recyclerView: RecyclerView
     private lateinit var partidosAdapter: PartidosAdapter
     private lateinit var database: DatabaseReference
-    private val partidosList = mutableListOf<Partido>()
+    private var partidosList = mutableListOf<Partido>()
     private lateinit var torneoId: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -28,12 +29,13 @@ class PartidosActivity : AppCompatActivity() {
         recyclerView.adapter = partidosAdapter
 
         database = FirebaseDatabase.getInstance().reference
-        torneoId = intent.getStringExtra("TORNEO_ID") ?: ""
+        torneoId = intent.getStringExtra("torneoId") ?: ""
 
         fetchPartidos()
     }
 
     private fun fetchPartidos() {
+        partidosList.clear()
         val partidosRef = database.child("partidos").orderByChild("idTorneo").equalTo(torneoId)
 
         partidosRef.addListenerForSingleValueEvent(object : ValueEventListener {
@@ -50,6 +52,4 @@ class PartidosActivity : AppCompatActivity() {
             }
         })
     }
-
-
 }

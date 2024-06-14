@@ -27,4 +27,31 @@
         android:layout_height="wrap_content"
         android:textSize="16sp"
         android:hint="Deporte"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="16dp"
+        android:background="?attr/selectableItemBackground">
+    <Button
+        android:id="@+id/btnGenerarPartidos"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/colorBotonRegistro"
+        android:textColor="@color/white"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="15dp"
+        android:text="Generar partidos"/>
+
+    <Button
+        android:id="@+id/btnVerPartidos"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/colorBotonRegistro"
+        android:textColor="@color/white"
+        android:layout_marginTop="5dp"
+        android:text="Ver partidos"
+        android:visibility="gone"/>
+    </LinearLayout>
 </LinearLayout>

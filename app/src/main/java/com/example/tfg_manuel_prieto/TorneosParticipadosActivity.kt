@@ -39,7 +39,7 @@ class TorneosParticipadosActivity : AppCompatActivity() {
         torneosParticipadosAdapter = TorneosParticipadosAdapter(torneosList) { torneo ->
             // Handle partidos button click
             val intent = Intent(this, PartidosActivity::class.java)
-            intent.putExtra("TORNEO_ID", torneo.id)
+            intent.putExtra("torneoId", torneo.id)
             startActivity(intent)
         }
         recyclerView.adapter = torneosParticipadosAdapter

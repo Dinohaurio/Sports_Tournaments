@@ -4,11 +4,16 @@ import android.app.ProgressDialog
 import android.content.Intent
 import android.os.Bundle
 import android.text.TextUtils
+import android.util.Log
 import android.view.View
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.gms.tasks.OnCompleteListener
+import com.google.firebase.auth.EmailAuthProvider
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.messaging.FirebaseMessaging
 import kotlin.properties.Delegates
 
 class MainActivity : AppCompatActivity() {
@@ -18,7 +23,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit var etEmail: EditText
     private lateinit var etPassword: EditText
     private lateinit var mProgressBar: ProgressDialog
-
     private lateinit var mAuth: FirebaseAuth
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -51,13 +55,15 @@ class MainActivity : AppCompatActivity() {
             mProgressBar.setMessage("Iniciando sesión...")
             mProgressBar.show()
 
-            mAuth.signInWithEmailAndPassword(email, password)
+            val credential = EmailAuthProvider.getCredential(email, password)
+            mAuth.signInWithCredential(credential)
                 .addOnCompleteListener(this) { task ->
                     if (task.isSuccessful) {
                         irHome()
                     } else {
                         Toast.makeText(this, "Autenticación fallida.", Toast.LENGTH_SHORT).show()
                     }
+                    mProgressBar.dismiss()
                 }
         } else {
             Toast.makeText(this, "Ingrese todos los detalles", Toast.LENGTH_SHORT).show()
