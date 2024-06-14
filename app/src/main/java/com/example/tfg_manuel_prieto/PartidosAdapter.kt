@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
-class PartidosAdapter(private val partidosList: List<Partido>) :
+class PartidosAdapter(private var partidosList: List<Partido>) :
     RecyclerView.Adapter<PartidosAdapter.PartidoViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PartidoViewHolder {
@@ -22,18 +22,30 @@ class PartidosAdapter(private val partidosList: List<Partido>) :
 
     override fun getItemCount() = partidosList.size
 
+    fun actualizarLista(partidos: List<Partido>) {
+        partidosList = partidos.sortedWith(compareBy { obtenerPrioridadFase(it.fase) })
+        notifyDataSetChanged()
+    }
+
+    private fun obtenerPrioridadFase(fase: String): Int {
+        return when (fase) {
+            "Dieciseisavos" -> 1
+            "Octavos de final" -> 2
+            "Cuartos de final" -> 3
+            "Semifinales" -> 4
+            "Final" -> 5
+            else -> 6 // Otro caso no especificado, si lo hubiera
+        }
+    }
+
     inner class PartidoViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val equipo1TextView: TextView = itemView.findViewById(R.id.equipo1)
-        private val marcador1TextView: TextView = itemView.findViewById(R.id.marcador1)
         private val equipo2TextView: TextView = itemView.findViewById(R.id.equipo2)
-        private val marcador2TextView: TextView = itemView.findViewById(R.id.marcador2)
         private val faseTextView: TextView = itemView.findViewById(R.id.fase)
 
         fun bind(partido: Partido) {
             equipo1TextView.text = partido.equipo1
-            marcador1TextView.text = partido.marcador1.toString()
             equipo2TextView.text = partido.equipo2
-            marcador2TextView.text = partido.marcador2.toString()
             faseTextView.text = partido.fase
         }
     }

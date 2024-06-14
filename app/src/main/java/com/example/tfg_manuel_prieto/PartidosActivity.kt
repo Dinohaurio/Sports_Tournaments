@@ -31,23 +31,30 @@ class PartidosActivity : AppCompatActivity() {
         database = FirebaseDatabase.getInstance().reference
         torneoId = intent.getStringExtra("torneoId") ?: ""
 
-        fetchPartidos()
+        obtenerPartidos()
     }
 
-    private fun fetchPartidos() {
-        partidosList.clear()
+    private fun obtenerPartidos() {
         val partidosRef = database.child("partidos").orderByChild("idTorneo").equalTo(torneoId)
 
         partidosRef.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
-                for (snapshot in dataSnapshot.children) {
-                    val partido = snapshot.getValue(Partido::class.java)
-                    partido?.let { partidosList.add(it) }
+                if (dataSnapshot.exists()) {
+                    partidosList.clear()
+                    for (partidoSnapshot in dataSnapshot.children) {
+                        val partido = partidoSnapshot.getValue(Partido::class.java)
+                        partido?.let { partidosList.add(it) }
+                    }
+                    // Actualizar el adaptador con la lista de partidos obtenida
+                    partidosAdapter.actualizarLista(partidosList)
+                } else {
+                    // Manejar caso donde no hay partidos encontrados
+                    Toast.makeText(this@PartidosActivity, "No se encontraron partidos", Toast.LENGTH_SHORT).show()
                 }
-                partidosAdapter.notifyDataSetChanged()
             }
 
             override fun onCancelled(databaseError: DatabaseError) {
+                // Manejar errores si la consulta se cancela
                 Toast.makeText(this@PartidosActivity, "Error al obtener los partidos", Toast.LENGTH_SHORT).show()
             }
         })

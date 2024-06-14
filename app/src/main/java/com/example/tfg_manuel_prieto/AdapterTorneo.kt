@@ -133,39 +133,49 @@ class AdapterTorneo(
 
         private fun generarPartidos(equipos: List<Equipo>, torneo: Torneo): List<Partido> {
             val partidos = mutableListOf<Partido>()
-            val equiposUsados = mutableSetOf<String>()
-            val totalEquipos = equipos.toMutableList()
+            var equiposRestantes = equipos.toMutableList()
 
-            if (totalEquipos.size % 2 != 0) {
-                totalEquipos.add(Equipo(id = "bye", nombre = "Bye", idTorneo = torneo.id!!))
+            if (equiposRestantes.size % 2 != 0) {
+                equiposRestantes.add(Equipo(id = "bye", nombre = "Bye", idTorneo = torneo.id!!))
             }
 
-            for (i in 0 until totalEquipos.size - 1) {
-                for (j in i + 1 until totalEquipos.size) {
-                    val equipo1 = totalEquipos[i]
-                    val equipo2 = totalEquipos[j]
-                    if (equiposUsados.contains(equipo1.id) || equiposUsados.contains(equipo2.id)) {
-                        continue
-                    }
+            var partidoCount = 1
+
+            while (equiposRestantes.size > 1) {
+                val faseActual = obtenerFaseDelTorneo(equiposRestantes.size / 2)
+                val partidosDeFase = mutableListOf<Partido>()
+
+                for (i in equiposRestantes.indices step 2) {
+                    val equipo1 = equiposRestantes[i]
+                    val equipo2 = equiposRestantes[i + 1]
                     val partido = Partido(
                         id = UUID.randomUUID().toString(),
                         equipo1 = equipo1.nombre,
                         equipo2 = equipo2.nombre,
                         marcador1 = 0,
                         marcador2 = 0,
-                        fase = obtenerFaseDelTorneo(partidos.size + 1),
+                        fase = faseActual,
                         idTorneo = torneo.id!!
                     )
                     partidos.add(partido)
-                    equiposUsados.add(equipo1.id)
-                    equiposUsados.add(equipo2.id)
+                    partidosDeFase.add(partido)
+                    partidoCount++
                 }
+                equiposRestantes = partidosDeFase.mapIndexed { index, _ ->
+                    Equipo(
+                        id = "ganadorPartido${index + 1}",
+                        nombre = "Ganador Partido ${index + 1}",
+                        idTorneo = torneo.id!!
+                    )
+                }.toMutableList()
             }
+
             return partidos
         }
 
-        private fun obtenerFaseDelTorneo(numeroPartidos: Int): String {
-            return when (numeroPartidos) {
+        private fun obtenerFaseDelTorneo(numPartidos: Int): String {
+            return when (numPartidos) {
+                16 -> "Dieciseisavos"
                 8 -> "Octavos de final"
                 4 -> "Cuartos de final"
                 2 -> "Semifinales"

@@ -7,7 +7,7 @@
 
     <TextView
         android:id="@+id/fase"
-        android:layout_width="wrap_content"
+        android:layout_width="378dp"
         android:layout_height="wrap_content"
         android:text="Fase"
         android:textSize="24sp"
@@ -27,27 +27,12 @@
             android:textSize="18sp" />
 
         <TextView
-            android:id="@+id/marcador1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="0"
+            android:text=" vs "
             android:textSize="18sp"
             android:layout_marginStart="8dp" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text=" - "
-            android:textSize="18sp"
-            android:layout_marginStart="8dp" />
-
-        <TextView
-            android:id="@+id/marcador2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="0"
-            android:textSize="18sp"
-            android:layout_marginStart="8dp" />
 
         <TextView
             android:id="@+id/equipo2"
@@ -57,5 +42,11 @@
             android:textSize="18sp"
             android:layout_marginStart="8dp" />
     </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@android:color/darker_gray"
+        android:layout_marginTop="16dp"/>
 
 </LinearLayout>
