@@ -72,7 +72,7 @@ class LobbyActivity : AppCompatActivity() {
         }
 
         findViewById<Button>(R.id.button4).setOnClickListener {
-            startActivity(Intent(this, ForgotPasswordActivity::class.java))
+            startActivity(Intent(this, ListaChatsActivity::class.java))
         }
 
         findViewById<Button>(R.id.button5).setOnClickListener {
