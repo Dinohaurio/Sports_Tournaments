@@ -18,6 +18,10 @@
         android:theme="@style/Theme.TFG_Manuel_Prieto"
         tools:targetApi="31">
         <activity
+            android:name=".NotificacionesActivity"
+            android:exported="false"
+            android:theme="@style/Theme.AppCompat"/>
+        <activity
             android:name=".ListaChatsActivity"
             android:exported="false"
             android:theme="@style/Theme.AppCompat"/>
@@ -77,6 +81,7 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
+        
 
     </application>
 
