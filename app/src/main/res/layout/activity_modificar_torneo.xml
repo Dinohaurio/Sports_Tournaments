@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ModificarTorneoActivity">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                android:text="MODIFICAR TORNEO" />
+
+            <EditText
+                android:id="@+id/etNombreTorneo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Nombre del Torneo"
+                android:layout_marginBottom="10dp"/>
+
+            <EditText
+                android:id="@+id/etLocalidad"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Localidad"
+                android:layout_marginBottom="10dp"/>
+
+            <EditText
+                android:id="@+id/etParticipantes"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Número de Participantes"
+                android:inputType="number"
+                android:layout_marginBottom="10dp"/>
+
+            <EditText
+                android:id="@+id/etFechaInicioInscripcion"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Fecha de inicio de inscripción"
+                android:inputType="text"
+                android:focusable="false"
+                android:layout_marginBottom="10dp"
+                android:onClick="onFechaInicioInscripcionClick"/>
+
+            <EditText
+                android:id="@+id/etFechaFinInscripcion"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Fecha de fin de inscripción"
+                android:inputType="text"
+                android:focusable="false"
+                android:layout_marginBottom="10dp"
+                android:onClick="onFechaFinInscripcionClick"/>
+
+            <EditText
+                android:id="@+id/etFechaComienzo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Fecha de Comienzo"
+                android:focusable="false"
+                android:layout_marginBottom="10dp"
+                android:onClick="onFechaComienzoClick"/>
+
+            <EditText
+                android:id="@+id/etFechaFin"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Fecha de Fin"
+                android:focusable="false"
+                android:layout_marginBottom="10dp"
+                android:onClick="onFechaFinClick"/>
+
+            <Spinner
+                android:id="@+id/spinnerDeporte"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"/>
+
+            <fragment
+                android:id="@+id/mapFragment"
+                android:name="com.google.android.gms.maps.SupportMapFragment"
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                android:layout_marginBottom="16dp"/>
+
+            <Button
+                android:id="@+id/btnGuardarCambios"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Guardar Cambios"
+                android:textColor="@color/white"
+                android:background="@drawable/rounded_button"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="16dp"/>
+
+        </LinearLayout>
+    </ScrollView>
+</RelativeLayout>

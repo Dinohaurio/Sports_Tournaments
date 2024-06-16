@@ -34,7 +34,7 @@ class PartidosAdapter(private var partidosList: List<Partido>) :
             "Cuartos de final" -> 3
             "Semifinales" -> 4
             "Final" -> 5
-            else -> 6 // Otro caso no especificado, si lo hubiera
+            else -> 6
         }
     }
 

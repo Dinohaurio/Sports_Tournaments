@@ -18,11 +18,10 @@ class ChatAdapter(private val messageList: List<Chat>, private val chatActivity:
     inner class ChatViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val messageTextView: TextView = itemView.findViewById(R.id.message_text)
         val userTextView: TextView = itemView.findViewById(R.id.user_text)
-
         init {
             itemView.setOnLongClickListener {
-                val chat = messageList[adapterPosition]  // Obtener el objeto Chat en esta posición
-                Log.d(TAG, "ID Mensaje: ${chat.idMensaje}") // Agrega un log para verificar el idMensaje
+                val chat = messageList[adapterPosition]
+                Log.d(TAG, "ID Mensaje: ${chat.idMensaje}")
                 mostrarDialogoReporte(chat.idMensaje) { idMensaje, motivo ->
                     chatActivity.reportarMensaje(idMensaje, motivo)
                 }
@@ -62,7 +61,6 @@ class ChatAdapter(private val messageList: List<Chat>, private val chatActivity:
             }
             .setNegativeButton("Cancelar", null)
             .create()
-
         dialog.show()
     }
 }

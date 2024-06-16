@@ -23,11 +23,8 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 
-
-
 class BuscarTorneoAdapter(private var torneosList: List<Torneo>) :
     RecyclerView.Adapter<BuscarTorneoAdapter.TorneoViewHolder>() {
-
     private val marcadores = mutableListOf<Marker>()
     private var isCameraAnimating = false
 
@@ -46,10 +43,10 @@ class BuscarTorneoAdapter(private var torneosList: List<Torneo>) :
         return torneosList.size
     }
 
-    fun updateData(newTorneosList: List<Torneo>) {
-        isCameraAnimating = false // Detener la animación de la cámara si está en curso
+    fun actualizar(newTorneosList: List<Torneo>) {
+        isCameraAnimating = false
         torneosList = newTorneosList
-        limpiarMarcadores() // Limpiar todos los marcadores
+        limpiarMarcadores()
         notifyDataSetChanged()
     }
 

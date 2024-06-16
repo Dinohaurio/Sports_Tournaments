@@ -54,10 +54,8 @@ class CrearTorneoActivity : AppCompatActivity(), OnMapReadyCallback {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_new_torneo)
-
         inicializar()
         cargarDeportes()
-
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
 
         val mapFragment = supportFragmentManager
@@ -85,16 +83,12 @@ class CrearTorneoActivity : AppCompatActivity(), OnMapReadyCallback {
         btnGuardar = findViewById(R.id.btnGuardar)
         etFechaInicioInscripcion = findViewById(R.id.etFechaInicioInscripcion)
         etFechaFinInscripcion = findViewById(R.id.etFechaFinInscripcion)
-
         database = FirebaseDatabase.getInstance().reference
         auth = FirebaseAuth.getInstance()
-
         etFechaInicioInscripcion.setOnClickListener { mostrarDatePickerDialog(etFechaInicioInscripcion) }
         etFechaFinInscripcion.setOnClickListener { mostrarDatePickerDialog(etFechaFinInscripcion) }
-
         etFechaComienzo.setOnClickListener { mostrarDatePickerDialog(etFechaComienzo) }
         etFechaFin.setOnClickListener { mostrarDatePickerDialog(etFechaFin) }
-
         btnGuardar.setOnClickListener { guardarTorneo() }
     }
 

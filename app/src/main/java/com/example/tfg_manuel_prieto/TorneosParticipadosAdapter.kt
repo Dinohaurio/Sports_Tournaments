@@ -80,9 +80,9 @@ class TorneosParticipadosAdapter(
 
         override fun onMapReady(map: GoogleMap) {
             googleMap = map
-            val position = adapterPosition // Obtener la posición del adaptador
+            val position = adapterPosition
             if (position != RecyclerView.NO_POSITION) {
-                val torneo = torneosList[position] // Obtener el torneo actual
+                val torneo = torneosList[position]
                 val lat = torneo.latitud?.toDoubleOrNull()
                 val lng = torneo.longitud?.toDoubleOrNull()
                 if (lat != null && lng != null) {

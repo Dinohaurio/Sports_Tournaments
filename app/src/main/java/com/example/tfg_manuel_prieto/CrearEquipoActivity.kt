@@ -33,11 +33,9 @@ class CrearEquipoActivity: AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_crear_equipo)
-
         torneoId = intent.getStringExtra("TORNEO_ID") ?: ""
         torneoNombre = intent.getStringExtra("TORNEO_NOMBRE") ?: ""
         maxParticipantes = intent.getIntExtra("MAX_PARTICIPANTES", 0)
-
         inicializar()
         obtenerNombreUsuario()
         verificarInscripcionPrevia()
@@ -49,12 +47,9 @@ class CrearEquipoActivity: AppCompatActivity() {
         tvCapitan = findViewById(R.id.tvCapitan)
         tvNombreTorneo = findViewById(R.id.tvNombreTorneo)
         tvPlazasRestantes = findViewById(R.id.tvPlazasRestantes)
-
         database = FirebaseDatabase.getInstance().reference
         auth = FirebaseAuth.getInstance()
-
         tvNombreTorneo.text = "Torneo: $torneoNombre"
-
         btnGuardar.setOnClickListener { guardarEquipo() }
     }
 
@@ -96,7 +91,6 @@ class CrearEquipoActivity: AppCompatActivity() {
                     } else {
                         tvCapitan.text = "Capitán: Nombre no disponible"
                     }
-                    // Cargar los números de participantes después de obtener el nombre del usuario
                     cargarNumerosParticipantes()
                 }
 
@@ -130,7 +124,6 @@ class CrearEquipoActivity: AppCompatActivity() {
                         Toast.makeText(this@CrearEquipoActivity, "Ya estás inscrito en este torneo", Toast.LENGTH_SHORT).show()
                         btnGuardar.isEnabled = false
                     } else {
-                        // Solo cargar números de participantes si no está inscrito
                         cargarNumerosParticipantes()
                     }
                 }

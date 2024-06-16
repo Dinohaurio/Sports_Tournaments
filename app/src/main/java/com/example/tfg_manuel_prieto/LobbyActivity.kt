@@ -31,12 +31,12 @@ class LobbyActivity : AppCompatActivity() {
         setContentView(R.layout.lobby_activity)
         notificationIcon = findViewById(R.id.notification_icon)
         notificationBadge = findViewById(R.id.notification_badge)
-        buttonAdmin = findViewById(R.id.buttonAdmin) // Inicializar el botón de administración
+        buttonAdmin = findViewById(R.id.buttonAdmin)
         inicializar()
         mostrarMensajeBienvenida()
         configurarListeners()
         setupNotificationListener()
-        verificarAdmin() // Verificar si el usuario es administrador
+        verificarAdmin()
     }
 
     private fun inicializar() {
@@ -47,7 +47,6 @@ class LobbyActivity : AppCompatActivity() {
 
     private fun mostrarMensajeBienvenida() {
         val currentUser = auth.currentUser
-
         if (currentUser != null) {
             val userId = currentUser.uid
             val usersRef = database.child("Users").child(userId)
@@ -81,7 +80,6 @@ class LobbyActivity : AppCompatActivity() {
     }
 
     private fun configurarListeners() {
-        // Configura los listeners de clic para cada botón
         findViewById<Button>(R.id.button1).setOnClickListener {
             startActivity(Intent(this, CrearTorneoActivity::class.java))
         }
@@ -114,7 +112,7 @@ class LobbyActivity : AppCompatActivity() {
             val intent = Intent(this, NotificacionesActivity::class.java)
             startActivity(intent)
             if (hasNotifications) {
-                notificationIcon.setColorFilter(null) // Clear the red color
+                notificationIcon.setColorFilter(null)
                 hasNotifications = false
             }
         }
@@ -124,7 +122,7 @@ class LobbyActivity : AppCompatActivity() {
         auth.signOut()
         val intent = Intent(this, MainActivity::class.java)
         startActivity(intent)
-        finish() // Finaliza LobbyActivity para que no se pueda volver atrás a ella
+        finish()
     }
 
     private fun setupNotificationListener() {
@@ -136,19 +134,19 @@ class LobbyActivity : AppCompatActivity() {
                 override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
                     if (snapshot.exists()) {
                         hasNotifications = true
-                        notificationBadge.visibility = View.VISIBLE // Mostrar el badge de notificaciones
+                        notificationBadge.visibility = View.VISIBLE
                     }
                 }
 
                 override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {
                     if (snapshot.exists()) {
                         hasNotifications = true
-                        notificationBadge.visibility = View.VISIBLE // Mostrar el badge de notificaciones
+                        notificationBadge.visibility = View.VISIBLE
                     }
                 }
 
                 override fun onChildRemoved(snapshot: DataSnapshot) {
-                    checkForUnreadNotifications(userId)
+                    notificaiconesNoLeidas(userId)
                 }
 
                 override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {}
@@ -159,7 +157,7 @@ class LobbyActivity : AppCompatActivity() {
             })
     }
 
-    private fun checkForUnreadNotifications(userId: String) {
+    private fun notificaiconesNoLeidas(userId: String) {
         database.child("notificaciones").child(userId).orderByChild("leido").equalTo(false)
             .addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onDataChange(dataSnapshot: DataSnapshot) {
@@ -168,21 +166,13 @@ class LobbyActivity : AppCompatActivity() {
                 }
 
                 override fun onCancelled(databaseError: DatabaseError) {
-                    // Handle error
                 }
             })
     }
 
-    // Función para manejar el clic en el icono de notificación
     fun onNotificationIconClick(view: View) {
-        // Implementar la lógica para abrir la pantalla de mensajes nuevos
-        // Por ejemplo, iniciar una nueva actividad
         startActivity(Intent(this, NotificacionesActivity::class.java))
-
-        // Después de abrir la actividad, actualizar el estado de las notificaciones
         hasNotifications = false
-
-        // Actualizar la visibilidad del badge
         notificationBadge.visibility = View.GONE
     }
 }

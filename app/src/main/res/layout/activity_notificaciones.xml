@@ -8,11 +8,10 @@
         android:id="@+id/titulo_notificaciones"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Notificaciones Recibidas"
+        android:layout_marginBottom="16dp"
+        android:text="Notificaciones Recibidas:"
         android:textSize="24sp"
-        android:textStyle="bold"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="16dp"/>
+        android:textStyle="bold" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_notificaciones"

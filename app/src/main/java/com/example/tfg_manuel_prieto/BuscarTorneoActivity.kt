@@ -45,14 +45,11 @@ class BuscarTorneoActivity : AppCompatActivity() {
         spinnerDeporte = findViewById(R.id.spinnerDeporte)
         btnBuscar = findViewById(R.id.btnBuscar)
         recyclerViewTorneos = findViewById(R.id.recyclerViewTorneos)
-
         recyclerViewTorneos.layoutManager = LinearLayoutManager(this)
         torneoAdapter = BuscarTorneoAdapter(emptyList())
         recyclerViewTorneos.adapter = torneoAdapter
-
         database = FirebaseDatabase.getInstance().reference
         auth = FirebaseAuth.getInstance()
-
         btnBuscar.setOnClickListener { buscarTorneos() }
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
     }
@@ -115,7 +112,7 @@ class BuscarTorneoActivity : AppCompatActivity() {
                     }
                 }
 
-                torneoAdapter.updateData(torneosList)
+                torneoAdapter.actualizar(torneosList)
             }
 
             override fun onCancelled(databaseError: DatabaseError) {

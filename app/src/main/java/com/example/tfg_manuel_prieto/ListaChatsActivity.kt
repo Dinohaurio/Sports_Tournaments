@@ -8,6 +8,7 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -29,17 +30,14 @@ class ListaChatsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_lista_chat_torneo)
-
         recyclerView = findViewById(R.id.recycler_view_torneos)
         recyclerView.layoutManager = LinearLayoutManager(this)
         torneosAdapter = TorneosAdapter(torneosList)
         recyclerView.adapter = torneosAdapter
-
         auth = FirebaseAuth.getInstance()
         database = FirebaseDatabase.getInstance().reference
 
         cargarTorneos()
-
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
     }
 
@@ -57,8 +55,6 @@ class ListaChatsActivity : AppCompatActivity() {
             val userId = currentUser.uid
             val torneosRef = database.child("torneos")
             val equiposRef = database.child("equipos")
-
-            // Consultar torneos creados por el usuario actual
             val torneosCreadosQuery = torneosRef.orderByChild("usuarioId").equalTo(userId)
             torneosCreadosQuery.addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onDataChange(dataSnapshot: DataSnapshot) {
@@ -72,11 +68,10 @@ class ListaChatsActivity : AppCompatActivity() {
                 }
 
                 override fun onCancelled(databaseError: DatabaseError) {
-                    // Handle possible errors.
+                    Toast.makeText(this@ListaChatsActivity, "Error al obtener los Torneos", Toast.LENGTH_SHORT).show()
                 }
             })
 
-            // Consultar torneos en los que el usuario actual está inscrito como participante
             val torneosInscritoQuery = equiposRef.orderByChild("idCapitan").equalTo(userId)
             torneosInscritoQuery.addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onDataChange(dataSnapshot: DataSnapshot) {
@@ -93,7 +88,6 @@ class ListaChatsActivity : AppCompatActivity() {
                                 }
 
                                 override fun onCancelled(error: DatabaseError) {
-                                    // Handle possible errors.
                                 }
                             })
                         }
@@ -101,7 +95,6 @@ class ListaChatsActivity : AppCompatActivity() {
                 }
 
                 override fun onCancelled(databaseError: DatabaseError) {
-                    // Handle possible errors.
                 }
             })
         }

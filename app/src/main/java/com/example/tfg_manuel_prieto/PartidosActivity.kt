@@ -13,7 +13,6 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 
 class PartidosActivity : AppCompatActivity() {
-
     private lateinit var recyclerView: RecyclerView
     private lateinit var partidosAdapter: PartidosAdapter
     private lateinit var database: DatabaseReference
@@ -23,17 +22,14 @@ class PartidosActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_partidos)
-
         recyclerView = findViewById(R.id.recyclerViewPartidos)
         recyclerView.layoutManager = LinearLayoutManager(this)
         partidosAdapter = PartidosAdapter(partidosList)
         recyclerView.adapter = partidosAdapter
-
         database = FirebaseDatabase.getInstance().reference
         torneoId = intent.getStringExtra("torneoId") ?: ""
 
         obtenerPartidos()
-
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
     }
 
@@ -56,16 +52,13 @@ class PartidosActivity : AppCompatActivity() {
                         val partido = partidoSnapshot.getValue(Partido::class.java)
                         partido?.let { partidosList.add(it) }
                     }
-                    // Actualizar el adaptador con la lista de partidos obtenida
                     partidosAdapter.actualizarLista(partidosList)
                 } else {
-                    // Manejar caso donde no hay partidos encontrados
                     Toast.makeText(this@PartidosActivity, "No se encontraron partidos", Toast.LENGTH_SHORT).show()
                 }
             }
 
             override fun onCancelled(databaseError: DatabaseError) {
-                // Manejar errores si la consulta se cancela
                 Toast.makeText(this@PartidosActivity, "Error al obtener los partidos", Toast.LENGTH_SHORT).show()
             }
         })

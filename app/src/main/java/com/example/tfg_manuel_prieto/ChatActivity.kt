@@ -37,23 +37,19 @@ class ChatActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_chat)
-
         recyclerViewChat = findViewById(R.id.recycler_view_chat)
         editTextMessage = findViewById(R.id.edit_text_message)
         buttonSend = findViewById(R.id.button_send)
-
         auth = FirebaseAuth.getInstance()
         database = FirebaseDatabase.getInstance().reference
         torneoId = intent.getStringExtra("torneoId") ?: ""
         torneoNombre = intent.getStringExtra("torneoNombre") ?: ""
-
         chatAdapter = ChatAdapter(messageList, this@ChatActivity)
         recyclerViewChat.adapter = chatAdapter
         val layoutManager = LinearLayoutManager(this)
         layoutManager.stackFromEnd = true
         recyclerViewChat.layoutManager = layoutManager
         recyclerViewChat.adapter = chatAdapter
-
         buttonSend.setOnClickListener {
             val message = editTextMessage.text.toString().trim()
             if (message.isNotEmpty()) {
@@ -65,7 +61,6 @@ class ChatActivity : AppCompatActivity() {
         }
 
         cargarMensajes()
-
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
     }
 
@@ -88,8 +83,8 @@ class ChatActivity : AppCompatActivity() {
                     val userName = dataSnapshot.child("nombre").getValue(String::class.java)
                     if (userName != null) {
                         val chatRef = database.child("chats").child(torneoId).push()
-                        val idMensaje = chatRef.key ?: "" // Obtener el id único del chat
-                        val chatMessage = Chat(userId, userName, message, torneoId, idMensaje) // Incluir el idMensaje
+                        val idMensaje = chatRef.key ?: ""
+                        val chatMessage = Chat(userId, userName, message, torneoId, idMensaje)
                         chatRef.setValue(chatMessage)
                             .addOnSuccessListener {
                                 obtenerNombreTorneoYEnviarNotificaciones(userId, userName, torneoId)
@@ -120,7 +115,6 @@ class ChatActivity : AppCompatActivity() {
 
     private fun enviarNotificacionesUsuariosExceptoYo(userId: String, userName: String, torneoId: String, nombreTorneo: String) {
         val equiposRef = database.child("equipos")
-
         val query = equiposRef.orderByChild("idTorneo").equalTo(torneoId)
         query.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
@@ -147,14 +141,12 @@ class ChatActivity : AppCompatActivity() {
                         }
 
                         override fun onCancelled(databaseError: DatabaseError) {
-                            // Handle error
                         }
                     })
                 }
             }
 
             override fun onCancelled(databaseError: DatabaseError) {
-                // Manejar errores de base de datos, si es necesario
             }
         })
     }
@@ -166,7 +158,7 @@ class ChatActivity : AppCompatActivity() {
                 titulo = "Nuevo mensaje en un chat de torneo",
                 cuerpo = "Nuevo mensaje de $userName en el chat del torneo $nombreTorneo",
                 leido = false,
-                chatId = "", // Aquí debes proporcionar el ID del chat si lo necesitas
+                chatId = "",
                 nombreTorneo = nombreTorneo,
                 nombreUsuario = userName,
                 userId = userId
@@ -189,7 +181,7 @@ class ChatActivity : AppCompatActivity() {
                 if (chatMessage != null) {
                     messageList.add(chatMessage)
                     chatAdapter.notifyItemInserted(messageList.size - 1)
-                    recyclerViewChat.scrollToPosition(messageList.size - 1) // Desplazarse al último mensaje
+                    recyclerViewChat.scrollToPosition(messageList.size - 1)
                 }
             }
 
@@ -214,7 +206,7 @@ class ChatActivity : AppCompatActivity() {
                     for (torneoSnapshot in dataSnapshot.children) {
                         for (chatSnapshot in torneoSnapshot.children) {
                             val mensajeId = chatSnapshot.child("idMensaje").getValue(String::class.java)
-                            val texto = chatSnapshot.child("message").getValue(String::class.java) // Obtener el texto del mensaje
+                            val texto = chatSnapshot.child("message").getValue(String::class.java)
                             if (mensajeId == idMensaje) {
                                 mensajeEncontrado = true
                                 mensajeTexto = texto

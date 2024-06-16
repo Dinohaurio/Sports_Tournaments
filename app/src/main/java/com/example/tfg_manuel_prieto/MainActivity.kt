@@ -29,17 +29,13 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
-        // Inicializar componentes de la UI primero
         inicializar()
-
         mAuth = FirebaseAuth.getInstance()
         val currentUser = mAuth.currentUser
         if (currentUser != null) {
-            // Usuario ya está autenticado, redirigir a LobbyActivity
             val intent = Intent(this, LobbyActivity::class.java)
             startActivity(intent)
-            finish() // Finaliza MainActivity para que no se pueda volver atrás a ella
+            finish()
         }
     }
 
@@ -72,13 +68,11 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-
-
     private fun irHome() {
         mProgressBar.hide()
         val intent = Intent(this, LobbyActivity::class.java)
         startActivity(intent)
-        finish() // Finaliza MainActivity para que no se pueda volver atrás a ella
+        finish()
     }
 
     fun iniciarSesion(view: View) {

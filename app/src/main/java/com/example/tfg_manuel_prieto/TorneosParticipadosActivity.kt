@@ -48,7 +48,7 @@ class TorneosParticipadosActivity : AppCompatActivity() {
         auth = FirebaseAuth.getInstance()
         database = FirebaseDatabase.getInstance().reference
 
-        fetchTorneosParticipados()
+        buscarTorneosParticipados()
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
     }
@@ -61,7 +61,7 @@ class TorneosParticipadosActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
-    private fun fetchTorneosParticipados() {
+    private fun buscarTorneosParticipados() {
         val currentUser = auth.currentUser
         if (currentUser != null) {
             val userId = currentUser.uid
@@ -72,7 +72,7 @@ class TorneosParticipadosActivity : AppCompatActivity() {
                     override fun onDataChange(dataSnapshot: DataSnapshot) {
                         for (equipoSnapshot in dataSnapshot.children) {
                             val equipo = equipoSnapshot.getValue(Equipo::class.java)
-                            equipo?.let { fetchTorneoPorId(it.idTorneo) }
+                            equipo?.let { buscarTorneoPorId(it.idTorneo) }
                         }
                     }
 
@@ -83,7 +83,7 @@ class TorneosParticipadosActivity : AppCompatActivity() {
         }
     }
 
-    private fun fetchTorneoPorId(torneoId: String) {
+    private fun buscarTorneoPorId(torneoId: String) {
         val torneosRef = database.child("torneos")
 
         torneosRef.child(torneoId)

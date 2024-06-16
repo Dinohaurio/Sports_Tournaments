@@ -26,15 +26,12 @@ class NotificacionesActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_notificaciones)
-
         database = FirebaseDatabase.getInstance().reference
         auth = FirebaseAuth.getInstance()
-
         recyclerView = findViewById(R.id.recycler_notificaciones)
         recyclerView.layoutManager = LinearLayoutManager(this)
         adapter = NotificacionesAdapter(emptyList()) // Inicializamos con lista vacía
         recyclerView.adapter = adapter
-
         buttonClearNotifications = findViewById(R.id.btnLimpiarNotificaciones)
         buttonClearNotifications.setOnClickListener {
             limpiarNotificaciones()
@@ -73,7 +70,7 @@ class NotificacionesActivity : AppCompatActivity() {
             }
 
             override fun onCancelled(databaseError: DatabaseError) {
-                // Manejar errores si es necesario
+                Toast.makeText(this@NotificacionesActivity, "Error al obtener las notificaciones", Toast.LENGTH_SHORT).show()
             }
         })
     }

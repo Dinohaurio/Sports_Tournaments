@@ -26,16 +26,11 @@ class LobbyAdminActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_lobby_admin)
-
         database = FirebaseDatabase.getInstance().reference
-
         reportListView = findViewById(R.id.reportListView)
-
         adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1)
         reportListView.adapter = adapter
-
         reportListView.visibility = View.GONE
-
         reportListView.setOnItemClickListener { _, _, position, _ ->
             val selectedReport = adapter.getItem(position)
             if (selectedReport != null) {
@@ -91,8 +86,8 @@ class LobbyAdminActivity : AppCompatActivity() {
     }
 
     private fun mostrarDialogoAcciones(selectedReport: String) {
-        val motivo = selectedReport.split(" - ")[0] // Obtener el motivo del reporte
-        val mensaje = selectedReport.split(" - ")[1] // Obtener el mensaje reportado
+        val motivo = selectedReport.split(" - ")[0]
+        val mensaje = selectedReport.split(" - ")[1]
 
         val dialog = AlertDialog.Builder(this)
             .setTitle("Acciones para el reporte")
@@ -135,7 +130,7 @@ class LobbyAdminActivity : AppCompatActivity() {
                 }
 
                 override fun onCancelled(error: DatabaseError) {
-                    Log.e(TAG, "Error al buscar reporte para eliminar mensajes: ${error.message}")
+                    Toast.makeText(this@LobbyAdminActivity, "Error al obtener el reporte", Toast.LENGTH_SHORT).show()
                 }
             })
     }
@@ -154,25 +149,21 @@ class LobbyAdminActivity : AppCompatActivity() {
                             chatSnapshot.ref.removeValue()
                                 .addOnSuccessListener {
                                     mensajeEncontrado = true
-                                    Log.d(TAG, "Mensaje eliminado correctamente del chat")
                                     Toast.makeText(this@LobbyAdminActivity, "Mensaje eliminado correctamente del chat", Toast.LENGTH_SHORT).show()
                                 }
                                 .addOnFailureListener { exception ->
-                                    Log.e(TAG, "Error al eliminar el mensaje del chat: ${exception.message}")
                                     Toast.makeText(this@LobbyAdminActivity, "Error al eliminar el mensaje del chat: ${exception.message}", Toast.LENGTH_SHORT).show()
                                 }
                             break
                         }
                     }
                     if (mensajeEncontrado) {
-                        Log.e(TAG, "No se encontró el mensaje correspondiente para eliminar")
                         Toast.makeText(this@LobbyAdminActivity, "No se encontró el mensaje correspondiente para eliminar", Toast.LENGTH_SHORT).show()
                     }
                 }
             }
 
             override fun onCancelled(databaseError: DatabaseError) {
-                Log.e(TAG, "Error al cargar mensaje para eliminar: ${databaseError.message}")
                 Toast.makeText(this@LobbyAdminActivity, "Error al cargar mensaje para eliminar: ${databaseError.message}", Toast.LENGTH_SHORT).show()
             }
         })

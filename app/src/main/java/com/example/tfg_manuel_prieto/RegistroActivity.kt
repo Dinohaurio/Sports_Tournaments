@@ -98,8 +98,8 @@ class RegistroActivity : AppCompatActivity() {
                     .addOnCompleteListener(this) { task ->
                         if (task.isSuccessful) {
                             val user: FirebaseUser = auth.currentUser!!
-                            saveUserInfoToDatabase(user.uid, name, email)
-                            verifyEmail(user)
+                            guardarusuario(user.uid, name, email)
+                            verificarEmail(user)
                             updateUserInfoAndGoHome()
                         } else {
                             progressBar.visibility = View.GONE
@@ -131,7 +131,7 @@ class RegistroActivity : AppCompatActivity() {
         crearCuenta()
     }
 
-    private fun saveUserInfoToDatabase(userId: String, name: String, email: String) {
+    private fun guardarusuario(userId: String, name: String, email: String) {
         val currentUserDb = databaseReference.child(userId)
         currentUserDb.child("nombre").setValue(name)
         currentUserDb.child("email").setValue(email)
@@ -144,7 +144,7 @@ class RegistroActivity : AppCompatActivity() {
         finish()
     }
 
-    private fun verifyEmail(user: FirebaseUser) {
+    private fun verificarEmail(user: FirebaseUser) {
         user.sendEmailVerification()
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {

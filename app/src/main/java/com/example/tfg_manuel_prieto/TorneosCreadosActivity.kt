@@ -29,7 +29,6 @@ import java.util.Date
 import java.util.Locale
 
 class TorneosCreadosActivity : AppCompatActivity() {
-
     private lateinit var recyclerViewTorneos: RecyclerView
     private lateinit var torneoAdapter: AdapterTorneo
     private lateinit var torneosList: MutableList<Torneo>
@@ -80,7 +79,6 @@ class TorneosCreadosActivity : AppCompatActivity() {
     private fun cargarTorneosDelUsuario() {
         val torneosRef = database.child("torneos").orderByChild("usuarioId").equalTo(usuarioId)
 
-        // Usamos addChildEventListener para escuchar cambios en la lista de torneos
         torneosRef.addChildEventListener(object : ChildEventListener {
             override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
                 val torneo = snapshot.getValue(Torneo::class.java)
@@ -91,7 +89,6 @@ class TorneosCreadosActivity : AppCompatActivity() {
             }
 
             override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {
-                // Manejar cambios en los torneos si es necesario
                 val torneoChanged = snapshot.getValue(Torneo::class.java)
                 val index = torneosList.indexOfFirst { it.id == torneoChanged?.id }
                 if (index != -1 && torneoChanged != null) {
@@ -101,7 +98,6 @@ class TorneosCreadosActivity : AppCompatActivity() {
             }
 
             override fun onChildRemoved(snapshot: DataSnapshot) {
-                // Manejar eliminaciones de torneos si es necesario
                 val torneoRemoved = snapshot.getValue(Torneo::class.java)
                 val index = torneosList.indexOfFirst { it.id == torneoRemoved?.id }
                 if (index != -1 && torneoRemoved != null) {
@@ -111,7 +107,6 @@ class TorneosCreadosActivity : AppCompatActivity() {
             }
 
             override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {
-                // Implementar si se espera movimiento de torneos
             }
 
             override fun onCancelled(error: DatabaseError) {
@@ -125,6 +120,4 @@ class TorneosCreadosActivity : AppCompatActivity() {
         intent.putExtra("torneoId", torneo.id)
         startActivity(intent)
     }
-
-
 }

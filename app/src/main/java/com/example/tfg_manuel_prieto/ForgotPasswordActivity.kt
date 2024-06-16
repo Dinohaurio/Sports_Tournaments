@@ -16,7 +16,6 @@ import com.google.firebase.auth.FirebaseAuth
 class ForgotPasswordActivity : AppCompatActivity() {
     private var etEmail: EditText? = null
     private var btnSend: Button? = null
-    //Firebase references
     private var mAuth: FirebaseAuth? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,9 +26,9 @@ class ForgotPasswordActivity : AppCompatActivity() {
         etEmail = findViewById<View>(R.id.etEmail) as EditText
         btnSend = findViewById<View>(R.id.btnSend) as Button
         mAuth = FirebaseAuth.getInstance()
-        btnSend!!.setOnClickListener { sendPasswordResetEmail() }
+        btnSend!!.setOnClickListener { enviarEmailPassword() }
     }
-    private fun sendPasswordResetEmail() {
+    private fun enviarEmailPassword() {
         val email = etEmail?.text.toString()
         if (!TextUtils.isEmpty(email)) {
             mAuth!!

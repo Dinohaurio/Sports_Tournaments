@@ -1,6 +1,7 @@
 package com.example.tfg_manuel_prieto
 
 import Torneo
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -40,12 +41,12 @@ class AdapterTorneo(
     override fun getItemCount(): Int = torneosList.size
 
     inner class TorneoViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-
         private val nombreTorneo: TextView = itemView.findViewById(R.id.tvNombreTorneo)
         private val localidad: TextView = itemView.findViewById(R.id.tvLocalidad)
         private val deporte: TextView = itemView.findViewById(R.id.tvDeporte)
         private val btnGenerarPartidos: Button = itemView.findViewById(R.id.btnGenerarPartidos)
-        private val btnVerPartidos: Button = itemView.findViewById(R.id.btnVerPartidos) // Nuevo botón
+        private val btnVerPartidos: Button = itemView.findViewById(R.id.btnVerPartidos)
+        private val btnModificar: Button = itemView.findViewById(R.id.btnModificar)
 
         fun bind(torneo: Torneo) {
             nombreTorneo.text = torneo.nombre
@@ -67,7 +68,6 @@ class AdapterTorneo(
                 }
 
                 override fun onCancelled(databaseError: DatabaseError) {
-                    // Manejar errores si la consulta se cancela
                     Toast.makeText(itemView.context, "Error al verificar los partidos", Toast.LENGTH_SHORT).show()
                 }
             })
@@ -78,6 +78,12 @@ class AdapterTorneo(
 
             btnVerPartidos.setOnClickListener {
                 onVerPartidosClicked(torneo)
+            }
+
+            btnModificar.setOnClickListener {
+                val intent = Intent(itemView.context, ModificarTorneoActivity::class.java)
+                intent.putExtra("torneoId", torneo.id)
+                itemView.context.startActivity(intent)
             }
         }
 
@@ -104,7 +110,6 @@ class AdapterTorneo(
                 }
 
                 override fun onCancelled(databaseError: DatabaseError) {
-                    // Manejar errores si la consulta se cancela
                     Toast.makeText(itemView.context, "Error al generar los partidos", Toast.LENGTH_SHORT).show()
                 }
             })

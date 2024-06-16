@@ -10,7 +10,7 @@
         android:layout_height="wrap_content"
         android:text="Mis Torneos Creados"
         android:textSize="24sp"
-        android:layout_gravity="center"
+        android:layout_gravity="start"
         android:paddingBottom="16dp" />
 
     <androidx.recyclerview.widget.RecyclerView
