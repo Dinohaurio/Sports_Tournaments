@@ -138,7 +138,7 @@
                 android:id="@+id/button6"
                 android:layout_width="150dp"
                 android:layout_height="100dp"
-                android:background="@drawable/rounded_button_lobby"
+                android:background="@drawable/rounded_button_sesion"
                 android:text="Cerrar Sesión"
                 android:textColor="@android:color/white" />
         </LinearLayout>
