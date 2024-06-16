@@ -22,12 +22,14 @@ class LobbyActivity : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth
     private lateinit var database: DatabaseReference
     private lateinit var notificationIcon: ImageView
+    private lateinit var notificationBadge: ImageView
     private var hasNotifications = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.lobby_activity)
         notificationIcon = findViewById(R.id.notification_icon)
+        notificationBadge = findViewById(R.id.notification_badge)
         inicializar()
         mostrarMensajeBienvenida()
         configurarListeners()
@@ -112,61 +114,46 @@ class LobbyActivity : AppCompatActivity() {
         val currentUser = auth.currentUser ?: return
         val userId = currentUser.uid
 
-        database.child("chats").addChildEventListener(object : ChildEventListener {
-            override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
-                val chatId = snapshot.key ?: return
-                val senderUserId = snapshot.child("userId").getValue(String::class.java) ?: return
-
-                // Obtener el id del torneo al que pertenece el chat
-                val torneoId = snapshot.child("torneoId").getValue(String::class.java) ?: ""
-
-                // Obtener todos los participantes del torneo, excepto el usuario que envía el mensaje
-                val torneoRef = database.child("torneos").child(torneoId)
-                torneoRef.addListenerForSingleValueEvent(object : ValueEventListener {
-                    override fun onDataChange(torneoSnapshot: DataSnapshot) {
-                        val participantes = mutableListOf<String>()
-                        for (participanteSnapshot in torneoSnapshot.child("participantes").children) {
-                            val participanteId = participanteSnapshot.key ?: continue
-                            if (participanteId != senderUserId) {
-                                participantes.add(participanteId)
-                            }
-                        }
-
-                        // Obtener el nombre del torneo
-                        val nombreTorneo = torneoSnapshot.child("nombre").getValue(String::class.java) ?: ""
-
-                        // Obtener el nombre de usuario que envió el mensaje
-                        val userNameSender = snapshot.child("userName").getValue(String::class.java) ?: ""
-
-                        // Crear la nueva notificación para cada participante
-                        for (participantId in participantes) {
-                            val notificationId = database.child("notificaciones").child(participantId).push().key ?: continue
-                            val newNotification = Notificacion(
-                                titulo = "Nuevo mensaje en un chat de torneo",
-                                cuerpo = "Se ha recibido un mensaje de $userNameSender en el torneo $nombreTorneo",
-                                leido = false,
-                                chatId = chatId,
-                                nombreTorneo = nombreTorneo,
-                                nombreUsuario = userNameSender,
-                                userId = participantId
-                            )
-                            database.child("notificaciones").child(participantId).child(notificationId).setValue(newNotification)
-                        }
+        database.child("notificaciones").child(userId).orderByChild("leido").equalTo(false)
+            .addChildEventListener(object : ChildEventListener {
+                override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
+                    if (snapshot.exists()) {
+                        hasNotifications = true
+                        notificationBadge.visibility = View.VISIBLE // Mostrar el badge de notificaciones
                     }
+                }
 
-                    override fun onCancelled(databaseError: DatabaseError) {
-                        // Handle error
+                override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {
+                    if (snapshot.exists()) {
+                        hasNotifications = true
+                        notificationBadge.visibility = View.VISIBLE // Mostrar el badge de notificaciones
                     }
-                })
-            }
+                }
 
-            override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {}
-            override fun onChildRemoved(snapshot: DataSnapshot) {}
-            override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {}
-            override fun onCancelled(databaseError: DatabaseError) {
-                // Handle error
-            }
-        })
+                override fun onChildRemoved(snapshot: DataSnapshot) {
+                    checkForUnreadNotifications(userId)
+                }
+
+                override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {}
+
+                override fun onCancelled(databaseError: DatabaseError) {
+                    // Handle error
+                }
+            })
+    }
+
+    private fun checkForUnreadNotifications(userId: String) {
+        database.child("notificaciones").child(userId).orderByChild("leido").equalTo(false)
+            .addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(dataSnapshot: DataSnapshot) {
+                    hasNotifications = dataSnapshot.exists()
+                    notificationBadge.visibility = if (hasNotifications) View.VISIBLE else View.GONE
+                }
+
+                override fun onCancelled(databaseError: DatabaseError) {
+                    // Handle error
+                }
+            })
     }
 
     // Función para manejar el clic en el icono de notificación
@@ -179,7 +166,6 @@ class LobbyActivity : AppCompatActivity() {
         hasNotifications = false
 
         // Actualizar la visibilidad del badge
-        val notificationBadge = findViewById<ImageView>(R.id.notification_badge)
         notificationBadge.visibility = View.GONE
     }
 }

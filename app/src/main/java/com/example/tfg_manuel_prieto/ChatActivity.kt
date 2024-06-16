@@ -22,7 +22,6 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 
 class ChatActivity : AppCompatActivity() {
-
     private lateinit var auth: FirebaseAuth
     private lateinit var database: DatabaseReference
     private lateinit var chatAdapter: ChatAdapter
@@ -48,23 +47,25 @@ class ChatActivity : AppCompatActivity() {
         torneoNombre = intent.getStringExtra("torneoNombre") ?: ""
 
         chatAdapter = ChatAdapter(messageList)
-        recyclerViewChat.layoutManager = LinearLayoutManager(this)
+        val layoutManager = LinearLayoutManager(this)
+        layoutManager.stackFromEnd = true // Hace que el RecyclerView empiece desde el último mensaje
+        recyclerViewChat.layoutManager = layoutManager
         recyclerViewChat.adapter = chatAdapter
 
         buttonSend.setOnClickListener {
             val message = editTextMessage.text.toString().trim()
             if (message.isNotEmpty()) {
-                sendMessage(message, torneoId) // Incluir el id del torneo
+                enviarMensaje(message, torneoId) // Incluir el id del torneo
                 editTextMessage.text.clear()
             } else {
                 Toast.makeText(this@ChatActivity, "Escribe un mensaje antes de enviar", Toast.LENGTH_SHORT).show()
             }
         }
 
-        loadMessages()
+        cargarMensajes()
     }
 
-    private fun sendMessage(message: String, torneoId: String) {
+    private fun enviarMensaje(message: String, torneoId: String) {
         val currentUser = auth.currentUser
         if (currentUser != null) {
             val userId = currentUser.uid
@@ -78,8 +79,8 @@ class ChatActivity : AppCompatActivity() {
                         val chatMessage = Chat(userId, userName, message, torneoId) // Incluir el id del torneo
                         chatRef.setValue(chatMessage)
                             .addOnSuccessListener {
-                                // Después de enviar el mensaje, enviar notificaciones a los otros usuarios
-                                enviarNotificacionesUsuariosExceptoYo(userId, userName, torneoId)
+                                // Obtener el nombre del torneo y luego enviar notificaciones
+                                obtenerNombreTorneoYEnviarNotificaciones(userId, userName, torneoId)
                             }
                             .addOnFailureListener { exception ->
                                 // Manejar fallos al enviar el mensaje
@@ -94,10 +95,23 @@ class ChatActivity : AppCompatActivity() {
         }
     }
 
-    private fun enviarNotificacionesUsuariosExceptoYo(userId: String, userName: String, torneoId: String) {
+    private fun obtenerNombreTorneoYEnviarNotificaciones(userId: String, userName: String, torneoId: String) {
+        val torneoRef = database.child("torneos").child(torneoId)
+        torneoRef.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                val nombreTorneo = dataSnapshot.child("nombre").getValue(String::class.java) ?: ""
+                enviarNotificacionesUsuariosExceptoYo(userId, userName, torneoId, nombreTorneo)
+            }
+
+            override fun onCancelled(databaseError: DatabaseError) {
+                // Handle possible errors.
+            }
+        })
+    }
+
+    private fun enviarNotificacionesUsuariosExceptoYo(userId: String, userName: String, torneoId: String, nombreTorneo: String) {
         val equiposRef = database.child("equipos")
 
-        // Consultar los equipos inscritos en el torneo específico (con idTorneo igual a torneoId)
         val query = equiposRef.orderByChild("idTorneo").equalTo(torneoId)
         query.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
@@ -111,7 +125,6 @@ class ChatActivity : AppCompatActivity() {
                         inscritos.add(idCapitan!!)
                     }
 
-                    // Agregar miembros del equipo a la lista de inscritos
                     val miembrosRef = database.child("equipos").child(equipoId).child("miembros")
                     miembrosRef.addListenerForSingleValueEvent(object : ValueEventListener {
                         override fun onDataChange(membersSnapshot: DataSnapshot) {
@@ -122,10 +135,7 @@ class ChatActivity : AppCompatActivity() {
                                 }
                             }
 
-                            // Enviar notificación a cada usuario inscrito
-                            inscritos.forEach { inscritoId ->
-                                enviarNotificacion(userName, inscritoId, torneoId)
-                            }
+                            enviarNotificacion(userName, inscritos, torneoId, nombreTorneo)
                         }
 
                         override fun onCancelled(databaseError: DatabaseError) {
@@ -142,28 +152,30 @@ class ChatActivity : AppCompatActivity() {
         })
     }
 
-    private fun enviarNotificacion(userName: String, userId: String, torneoId: String) {
-        val notificationId = database.child("notificaciones").child(userId).push().key ?: return
-        val newNotification = Notificacion(
-            titulo = "Nuevo mensaje en un chat de torneo",
-            cuerpo = "Nuevo mensaje de $userName en el chat del torneo $torneoNombre",
-            leido = false,
-            chatId = "", // Aquí debes proporcionar el ID del chat si lo necesitas
-            nombreTorneo = torneoId,
-            nombreUsuario = userName,
-            userId = userId
-        )
+    private fun enviarNotificacion(userName: String, userIds: List<String>, torneoId: String, nombreTorneo: String) {
+        userIds.forEach { userId ->
+            val notificationId = database.child("notificaciones").child(userId).push().key ?: return
+            val newNotification = Notificacion(
+                titulo = "Nuevo mensaje en un chat de torneo",
+                cuerpo = "Nuevo mensaje de $userName en el chat del torneo $nombreTorneo",
+                leido = false,
+                chatId = "", // Aquí debes proporcionar el ID del chat si lo necesitas
+                nombreTorneo = nombreTorneo,
+                nombreUsuario = userName,
+                userId = userId
+            )
 
-        database.child("notificaciones").child(userId).child(notificationId).setValue(newNotification)
-            .addOnSuccessListener {
-                Log.d(TAG, "Notificación enviada correctamente a usuario $userId")
-            }
-            .addOnFailureListener { exception ->
-                Log.e(TAG, "Error al enviar la notificación a usuario $userId", exception)
-            }
+            database.child("notificaciones").child(userId).child(notificationId).setValue(newNotification)
+                .addOnSuccessListener {
+                    Log.d(TAG, "Notificación enviada correctamente a usuario $userId")
+                }
+                .addOnFailureListener { exception ->
+                    Log.e(TAG, "Error al enviar la notificación a usuario $userId", exception)
+                }
+        }
     }
 
-    private fun loadMessages() {
+    private fun cargarMensajes() {
         val chatRef = database.child("chats").child(torneoId)
         chatRef.addChildEventListener(object : ChildEventListener {
             override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
@@ -171,6 +183,7 @@ class ChatActivity : AppCompatActivity() {
                 if (chatMessage != null) {
                     messageList.add(chatMessage)
                     chatAdapter.notifyItemInserted(messageList.size - 1)
+                    recyclerViewChat.scrollToPosition(messageList.size - 1) // Desplazarse al último mensaje
                 }
             }
 

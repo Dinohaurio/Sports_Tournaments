@@ -17,8 +17,6 @@ class NotificacionesAdapter(private var notificaciones: List<Notificacion>) : Re
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val notificacion = notificaciones[position]
         holder.tvTitulo.text = notificacion.titulo
-
-        // Mostrar el cuerpo de la notificación con el nombre del usuario y torneo
         holder.tvCuerpo.text = "Mensaje de ${notificacion.nombreUsuario} en el torneo ${notificacion.nombreTorneo}"
     }
 

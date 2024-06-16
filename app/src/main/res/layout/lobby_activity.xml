@@ -2,56 +2,66 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:gravity="center"
+    android:layout_height="match_parent"
     android:orientation="vertical"
+    android:gravity="start"
     tools:context=".LobbyActivity">
 
+    <!-- FrameLayout for notification badge -->
     <FrameLayout
         android:id="@+id/notification_frame"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_gravity="end">
+
+    </FrameLayout>
+
+    <!-- Horizontal layout for notification icon and welcome text -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="start"
+        android:orientation="horizontal"
+        android:paddingHorizontal="16dp"
+        android:paddingTop="16dp"
+        android:paddingBottom="8dp">
+
+        <TextView
+            android:id="@+id/tvBienvenido"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="¡Bienvenido!"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:textAlignment="viewStart"
+            android:layout_marginStart="12dp"
+            android:visibility="visible" />
+
+        <ImageView
+            android:id="@+id/notification_icon"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/sobre"
+            android:layout_marginLeft="50dp"
+            android:clickable="true"
+            android:onClick="onNotificationIconClick" />
 
         <ImageView
             android:id="@+id/notification_badge"
             android:layout_width="16dp"
             android:layout_height="16dp"
-            android:layout_gravity="end"
-            android:layout_marginTop="20dp"
-            android:layout_marginLeft="375dp"
             android:src="@drawable/cir_rojo"
             android:visibility="gone" />
-    </FrameLayout>
-
-    <ImageView
-        android:id="@+id/notification_icon"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_gravity="end"
-        android:layout_marginRight="15dp"
-        android:layout_marginTop="10dp"
-        android:clickable="true"
-        android:onClick="onNotificationIconClick"
-        android:src="@drawable/sobre" />
-
-    <TextView
-        android:id="@+id/tvBienvenido"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="start"
-        android:layout_marginBottom="60dp"
-        android:layout_marginLeft="40dp"
-        android:text="¡Bienvenido!"
-        android:textAlignment="textStart"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        android:visibility="visible" />
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:layout_marginTop="50dp"
+        android:gravity="center">
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -64,6 +74,7 @@
                 android:id="@+id/button1"
                 android:layout_width="117dp"
                 android:layout_height="100dp"
+                android:layout_marginTop="20dp"
                 android:background="@color/colorBotonRegistro"
                 android:text="CREAR TORNEO"
                 android:textColor="@android:color/white" />
@@ -91,9 +102,9 @@
                 android:background="@color/colorBotonRegistro"
                 android:text="TORNEOS CREADOS"
                 android:textColor="@android:color/white" />
-
         </LinearLayout>
 
+        <!-- Second column of buttons -->
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
@@ -105,6 +116,7 @@
                 android:id="@+id/button4"
                 android:layout_width="117dp"
                 android:layout_height="100dp"
+                android:layout_marginTop="20dp"
                 android:background="@color/colorBotonRegistro"
                 android:text="MENSAJES"
                 android:textColor="@android:color/white" />
@@ -132,7 +144,7 @@
                 android:background="@color/colorBotonRegistro"
                 android:text="Cerrar Sesión"
                 android:textColor="@android:color/white" />
-
         </LinearLayout>
     </LinearLayout>
+
 </LinearLayout>

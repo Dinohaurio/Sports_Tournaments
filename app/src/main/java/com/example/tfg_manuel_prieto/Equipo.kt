@@ -7,5 +7,5 @@ data class Equipo(
     val idCapitan: String = "",
     val numeroParticipantes: Int = 0,
     val nombreTorneo: String = "",
-    var idTorneo: String = "" // Nuevo campo para almacenar el ID del torneo
+    var idTorneo: String = ""
 )

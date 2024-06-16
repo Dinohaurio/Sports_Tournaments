@@ -20,6 +20,7 @@ class NotificacionesActivity : AppCompatActivity() {
     private lateinit var adapter: NotificacionesAdapter
     private lateinit var database: DatabaseReference
     private lateinit var auth: FirebaseAuth
+    private lateinit var buttonClearNotifications: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,6 +34,11 @@ class NotificacionesActivity : AppCompatActivity() {
         adapter = NotificacionesAdapter(emptyList()) // Inicializamos con lista vacía
         recyclerView.adapter = adapter
 
+        buttonClearNotifications = findViewById(R.id.btnLimpiarNotificaciones)
+        buttonClearNotifications.setOnClickListener {
+            limpiarNotificaciones()
+        }
+
         cargarNotificaciones()
     }
 
@@ -43,7 +49,7 @@ class NotificacionesActivity : AppCompatActivity() {
         val notificacionesRef = database.child("notificaciones").child(userId)
         notificacionesRef.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
-                val notificaciones = mutableListOf<Notificacion>()
+                val notificaciones = mutableSetOf<Notificacion>()
 
                 for (notificacionSnapshot in dataSnapshot.children) {
                     val notificacion = notificacionSnapshot.getValue(Notificacion::class.java)
@@ -52,12 +58,27 @@ class NotificacionesActivity : AppCompatActivity() {
                     }
                 }
 
-                adapter.actualizarNotificaciones(notificaciones)
+                adapter.actualizarNotificaciones(notificaciones.toList())
             }
 
             override fun onCancelled(databaseError: DatabaseError) {
                 // Manejar errores si es necesario
             }
         })
+    }
+
+    private fun limpiarNotificaciones() {
+        val currentUser = auth.currentUser ?: return
+        val userId = currentUser.uid
+
+        val notificacionesRef = database.child("notificaciones").child(userId)
+        notificacionesRef.removeValue()
+            .addOnSuccessListener {
+                adapter.actualizarNotificaciones(emptyList())
+                Toast.makeText(this, "Notificaciones eliminadas", Toast.LENGTH_SHORT).show()
+            }
+            .addOnFailureListener {
+                Toast.makeText(this, "Error al eliminar notificaciones", Toast.LENGTH_SHORT).show()
+            }
     }
 }
