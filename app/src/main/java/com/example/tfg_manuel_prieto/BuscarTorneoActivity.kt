@@ -3,6 +3,7 @@ package com.example.tfg_manuel_prieto
 import Torneo
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.view.MenuItem
 import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.EditText
@@ -53,6 +54,15 @@ class BuscarTorneoActivity : AppCompatActivity() {
         auth = FirebaseAuth.getInstance()
 
         btnBuscar.setOnClickListener { buscarTorneos() }
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == android.R.id.home) {
+            onBackPressed()
+            return true
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     private fun cargarDeportes() {

@@ -23,6 +23,7 @@ class LobbyActivity : AppCompatActivity() {
     private lateinit var database: DatabaseReference
     private lateinit var notificationIcon: ImageView
     private lateinit var notificationBadge: ImageView
+    private lateinit var buttonAdmin: Button // Declarar el botón de administración
     private var hasNotifications = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -30,10 +31,12 @@ class LobbyActivity : AppCompatActivity() {
         setContentView(R.layout.lobby_activity)
         notificationIcon = findViewById(R.id.notification_icon)
         notificationBadge = findViewById(R.id.notification_badge)
+        buttonAdmin = findViewById(R.id.buttonAdmin) // Inicializar el botón de administración
         inicializar()
         mostrarMensajeBienvenida()
         configurarListeners()
         setupNotificationListener()
+        verificarAdmin() // Verificar si el usuario es administrador
     }
 
     private fun inicializar() {
@@ -66,6 +69,16 @@ class LobbyActivity : AppCompatActivity() {
         }
     }
 
+    private fun verificarAdmin() {
+        val currentUser = auth.currentUser
+
+        if (currentUser != null) {
+            val email = currentUser.email ?: ""
+            if (email == "prirodmanuel@gmail.com") {
+                buttonAdmin.visibility = View.VISIBLE // Mostrar el botón si es administrador
+            }
+        }
+    }
 
     private fun configurarListeners() {
         // Configura los listeners de clic para cada botón
@@ -91,6 +104,10 @@ class LobbyActivity : AppCompatActivity() {
 
         findViewById<Button>(R.id.button6).setOnClickListener {
             cerrarSesion()
+        }
+
+        buttonAdmin.setOnClickListener {
+            startActivity(Intent(this, LobbyAdminActivity::class.java))
         }
 
         notificationIcon.setOnClickListener {

@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.auth.EmailAuthProvider
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.messaging.FirebaseMessaging
 import kotlin.properties.Delegates
@@ -33,11 +34,12 @@ class MainActivity : AppCompatActivity() {
         inicializar()
 
         mAuth = FirebaseAuth.getInstance()
-
-        // Verificar si hay un usuario autenticado
         val currentUser = mAuth.currentUser
         if (currentUser != null) {
-            irHome()
+            // Usuario ya está autenticado, redirigir a LobbyActivity
+            val intent = Intent(this, LobbyActivity::class.java)
+            startActivity(intent)
+            finish() // Finaliza MainActivity para que no se pueda volver atrás a ella
         }
     }
 
@@ -69,6 +71,8 @@ class MainActivity : AppCompatActivity() {
             Toast.makeText(this, "Ingrese todos los detalles", Toast.LENGTH_SHORT).show()
         }
     }
+
+
 
     private fun irHome() {
         mProgressBar.hide()

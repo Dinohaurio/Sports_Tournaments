@@ -4,5 +4,6 @@ data class Chat(
     val userId: String = "",
     val userName: String = "",
     val message: String = "",
-    var torneoId: String = ""
+    var torneoId: String = "",
+    val idMensaje: String = ""
 )

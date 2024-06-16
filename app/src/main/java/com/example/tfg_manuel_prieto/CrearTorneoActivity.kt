@@ -7,6 +7,7 @@ import android.content.pm.PackageManager
 import android.location.Location
 import android.os.Bundle
 import android.util.Log
+import android.view.MenuItem
 import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.EditText
@@ -44,13 +45,10 @@ class CrearTorneoActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var etFechaFinInscripcion: EditText
     private lateinit var spinnerDeporte: Spinner
     private lateinit var btnGuardar: Button
-
     private lateinit var database: DatabaseReference
     private lateinit var auth: FirebaseAuth
-
     private lateinit var mapa: GoogleMap
     private var torneoLatLng: LatLng? = null
-
     private lateinit var fusedLocationClient: FusedLocationProviderClient
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -62,10 +60,19 @@ class CrearTorneoActivity : AppCompatActivity(), OnMapReadyCallback {
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
 
-        // Inicializar el mapa
         val mapFragment = supportFragmentManager
             .findFragmentById(R.id.mapFragment) as SupportMapFragment
         mapFragment.getMapAsync(this)
+
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == android.R.id.home) {
+            onBackPressed()
+            return true
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     private fun inicializar() {

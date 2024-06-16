@@ -1,6 +1,7 @@
 package com.example.tfg_manuel_prieto
 
 import android.os.Bundle
+import android.view.MenuItem
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -32,6 +33,16 @@ class PartidosActivity : AppCompatActivity() {
         torneoId = intent.getStringExtra("torneoId") ?: ""
 
         obtenerPartidos()
+
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == android.R.id.home) {
+            onBackPressed()
+            return true
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     private fun obtenerPartidos() {

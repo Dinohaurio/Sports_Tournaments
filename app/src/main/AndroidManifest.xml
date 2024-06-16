@@ -16,60 +16,79 @@
         android:roundIcon="@drawable/sports_tournaments_logo"
         android:supportsRtl="true"
         android:theme="@style/Theme.TFG_Manuel_Prieto"
+        android:screenOrientation="portrait"
         tools:targetApi="31">
+        <activity
+            android:name=".LobbyAdminActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat"/>
         <activity
             android:name=".NotificacionesActivity"
             android:exported="false"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat"/>
         <activity
             android:name=".ListaChatsActivity"
             android:exported="false"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat"/>
         <activity
             android:name=".ChatActivity"
             android:exported="false"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat"/>
         <activity
             android:name=".PartidosActivity"
             android:exported="false"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat"/>
         <activity
             android:name=".TorneosParticipadosActivity"
             android:exported="false"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat"/>
         <activity
             android:name=".CrearEquipoActivity"
             android:exported="false"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat"/>
         <activity
             android:name=".BuscarTorneoActivity"
             android:exported="false"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat"/>
         <activity
             android:name=".TorneosCreadosActivity"
             android:exported="false"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat"/>
         <activity
             android:name=".CrearTorneoActivity"
             android:exported="false"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat"/>
         <activity
             android:name=".LobbyActivity"
             android:exported="false"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat"/>
         <activity
             android:name=".ForgotPasswordActivity"
             android:exported="false"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat"/>
         <activity
             android:name=".RegistroActivity"
             android:exported="false"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat"/>
         <activity
             android:name=".MainActivity"
             android:exported="true"
+            android:screenOrientation="portrait"
             android:label="@string/app_name"
-            android:theme="@style/Theme.AppCompat.DayNight.DarkActionBar">
+            android:theme="@style/Theme.AppCompat">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />

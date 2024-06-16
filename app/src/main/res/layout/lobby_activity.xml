@@ -7,7 +7,6 @@
     android:gravity="start"
     tools:context=".LobbyActivity">
 
-    <!-- FrameLayout for notification badge -->
     <FrameLayout
         android:id="@+id/notification_frame"
         android:layout_width="wrap_content"
@@ -18,7 +17,6 @@
 
     </FrameLayout>
 
-    <!-- Horizontal layout for notification icon and welcome text -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -43,7 +41,7 @@
             android:id="@+id/notification_icon"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:src="@drawable/sobre"
+            android:src="@drawable/noti"
             android:layout_marginLeft="50dp"
             android:clickable="true"
             android:onClick="onNotificationIconClick" />
@@ -72,10 +70,10 @@
 
             <Button
                 android:id="@+id/button1"
-                android:layout_width="117dp"
+                android:layout_width="150dp"
                 android:layout_height="100dp"
                 android:layout_marginTop="20dp"
-                android:background="@color/colorBotonRegistro"
+                android:background="@drawable/rounded_button_lobby"
                 android:text="CREAR TORNEO"
                 android:textColor="@android:color/white" />
 
@@ -85,9 +83,9 @@
 
             <Button
                 android:id="@+id/button2"
-                android:layout_width="117dp"
+                android:layout_width="150dp"
                 android:layout_height="100dp"
-                android:background="@color/colorBotonRegistro"
+                android:background="@drawable/rounded_button_lobby"
                 android:text="BUSCAR TORNEOS"
                 android:textColor="@android:color/white" />
 
@@ -97,14 +95,13 @@
 
             <Button
                 android:id="@+id/button3"
-                android:layout_width="117dp"
+                android:layout_width="150dp"
                 android:layout_height="100dp"
-                android:background="@color/colorBotonRegistro"
+                android:background="@drawable/rounded_button_lobby"
                 android:text="TORNEOS CREADOS"
                 android:textColor="@android:color/white" />
         </LinearLayout>
 
-        <!-- Second column of buttons -->
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
@@ -114,10 +111,10 @@
 
             <Button
                 android:id="@+id/button4"
-                android:layout_width="117dp"
+                android:layout_width="150dp"
                 android:layout_height="100dp"
                 android:layout_marginTop="20dp"
-                android:background="@color/colorBotonRegistro"
+                android:background="@drawable/rounded_button_lobby"
                 android:text="MENSAJES"
                 android:textColor="@android:color/white" />
 
@@ -127,9 +124,9 @@
 
             <Button
                 android:id="@+id/button5"
-                android:layout_width="117dp"
+                android:layout_width="150dp"
                 android:layout_height="100dp"
-                android:background="@color/colorBotonRegistro"
+                android:background="@drawable/rounded_button_lobby"
                 android:text="TORNEOS INSCRITO"
                 android:textColor="@android:color/white" />
 
@@ -139,12 +136,20 @@
 
             <Button
                 android:id="@+id/button6"
-                android:layout_width="117dp"
+                android:layout_width="150dp"
                 android:layout_height="100dp"
-                android:background="@color/colorBotonRegistro"
+                android:background="@drawable/rounded_button_lobby"
                 android:text="Cerrar Sesión"
                 android:textColor="@android:color/white" />
         </LinearLayout>
     </LinearLayout>
-
+    <Button
+        android:id="@+id/buttonAdmin"
+        android:layout_width="310dp"
+        android:layout_marginTop="20dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/rounded_button"
+        android:text="ADMINISTRACIÓN"
+        android:layout_gravity="center"
+        android:visibility="gone" />
 </LinearLayout>

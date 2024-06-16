@@ -4,12 +4,14 @@ import android.content.ContentValues.TAG
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -27,8 +29,7 @@ class ChatActivity : AppCompatActivity() {
     private lateinit var chatAdapter: ChatAdapter
     private val messageList = mutableListOf<Chat>()
     private lateinit var torneoId: String
-    private lateinit var torneoNombre: String  // Nombre del torneo actual
-
+    private lateinit var torneoNombre: String
     private lateinit var recyclerViewChat: RecyclerView
     private lateinit var editTextMessage: EditText
     private lateinit var buttonSend: Button
@@ -46,16 +47,17 @@ class ChatActivity : AppCompatActivity() {
         torneoId = intent.getStringExtra("torneoId") ?: ""
         torneoNombre = intent.getStringExtra("torneoNombre") ?: ""
 
-        chatAdapter = ChatAdapter(messageList)
+        chatAdapter = ChatAdapter(messageList, this@ChatActivity)
+        recyclerViewChat.adapter = chatAdapter
         val layoutManager = LinearLayoutManager(this)
-        layoutManager.stackFromEnd = true // Hace que el RecyclerView empiece desde el último mensaje
+        layoutManager.stackFromEnd = true
         recyclerViewChat.layoutManager = layoutManager
         recyclerViewChat.adapter = chatAdapter
 
         buttonSend.setOnClickListener {
             val message = editTextMessage.text.toString().trim()
             if (message.isNotEmpty()) {
-                enviarMensaje(message, torneoId) // Incluir el id del torneo
+                enviarMensaje(message, torneoId)
                 editTextMessage.text.clear()
             } else {
                 Toast.makeText(this@ChatActivity, "Escribe un mensaje antes de enviar", Toast.LENGTH_SHORT).show()
@@ -63,6 +65,16 @@ class ChatActivity : AppCompatActivity() {
         }
 
         cargarMensajes()
+
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == android.R.id.home) {
+            onBackPressed()
+            return true
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     private fun enviarMensaje(message: String, torneoId: String) {
@@ -76,20 +88,19 @@ class ChatActivity : AppCompatActivity() {
                     val userName = dataSnapshot.child("nombre").getValue(String::class.java)
                     if (userName != null) {
                         val chatRef = database.child("chats").child(torneoId).push()
-                        val chatMessage = Chat(userId, userName, message, torneoId) // Incluir el id del torneo
+                        val idMensaje = chatRef.key ?: "" // Obtener el id único del chat
+                        val chatMessage = Chat(userId, userName, message, torneoId, idMensaje) // Incluir el idMensaje
                         chatRef.setValue(chatMessage)
                             .addOnSuccessListener {
-                                // Obtener el nombre del torneo y luego enviar notificaciones
                                 obtenerNombreTorneoYEnviarNotificaciones(userId, userName, torneoId)
                             }
                             .addOnFailureListener { exception ->
-                                // Manejar fallos al enviar el mensaje
                             }
                     }
                 }
 
                 override fun onCancelled(databaseError: DatabaseError) {
-                    // Handle possible errors.
+                    Toast.makeText(this@ChatActivity, "Error al enviar el mensaje: ${databaseError.message}", Toast.LENGTH_SHORT).show()
                 }
             })
         }
@@ -102,9 +113,7 @@ class ChatActivity : AppCompatActivity() {
                 val nombreTorneo = dataSnapshot.child("nombre").getValue(String::class.java) ?: ""
                 enviarNotificacionesUsuariosExceptoYo(userId, userName, torneoId, nombreTorneo)
             }
-
             override fun onCancelled(databaseError: DatabaseError) {
-                // Handle possible errors.
             }
         })
     }
@@ -134,7 +143,6 @@ class ChatActivity : AppCompatActivity() {
                                     inscritos.add(memberId)
                                 }
                             }
-
                             enviarNotificacion(userName, inscritos, torneoId, nombreTorneo)
                         }
 
@@ -147,7 +155,6 @@ class ChatActivity : AppCompatActivity() {
 
             override fun onCancelled(databaseError: DatabaseError) {
                 // Manejar errores de base de datos, si es necesario
-                Log.e(TAG, "Error al obtener los equipos del torneo $torneoId: ${databaseError.message}")
             }
         })
     }
@@ -167,10 +174,9 @@ class ChatActivity : AppCompatActivity() {
 
             database.child("notificaciones").child(userId).child(notificationId).setValue(newNotification)
                 .addOnSuccessListener {
-                    Log.d(TAG, "Notificación enviada correctamente a usuario $userId")
+                // Notificación enviada correctamente
                 }
                 .addOnFailureListener { exception ->
-                    Log.e(TAG, "Error al enviar la notificación a usuario $userId", exception)
                 }
         }
     }
@@ -193,5 +199,59 @@ class ChatActivity : AppCompatActivity() {
             override fun onCancelled(error: DatabaseError) {}
         })
     }
+
+    fun reportarMensaje(idMensaje: String, motivo: String) {
+        val currentUser = auth.currentUser
+        if (currentUser != null) {
+            val userId = currentUser.uid
+            val chatsRef = database.child("chats")
+
+            chatsRef.addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(dataSnapshot: DataSnapshot) {
+                    var mensajeEncontrado = false
+                    var mensajeTexto: String? = null
+
+                    for (torneoSnapshot in dataSnapshot.children) {
+                        for (chatSnapshot in torneoSnapshot.children) {
+                            val mensajeId = chatSnapshot.child("idMensaje").getValue(String::class.java)
+                            val texto = chatSnapshot.child("message").getValue(String::class.java) // Obtener el texto del mensaje
+                            if (mensajeId == idMensaje) {
+                                mensajeEncontrado = true
+                                mensajeTexto = texto
+                                break
+                            }
+                        }
+                        if (mensajeEncontrado) break
+                    }
+
+                    if (mensajeEncontrado) {
+                        val reporteRef = database.child("reportes").push()
+                        val reporte = Reporte(
+                            reporteId = reporteRef.key ?: "",
+                            messageId = idMensaje,
+                            userId = userId,
+                            motivo = motivo,
+                            mensaje = mensajeTexto ?: "",
+                            resuelto = false
+                        )
+                        reporteRef.setValue(reporte)
+                            .addOnSuccessListener {
+                                Toast.makeText(this@ChatActivity, "Mensaje reportado correctamente", Toast.LENGTH_SHORT).show()
+                            }
+                            .addOnFailureListener { exception ->
+                                Toast.makeText(this@ChatActivity, "Error al reportar el mensaje: ${exception.message}", Toast.LENGTH_SHORT).show()
+                            }
+                    } else {
+                        Toast.makeText(this@ChatActivity, "El mensaje no existe o ya ha sido eliminado", Toast.LENGTH_SHORT).show()
+                    }
+                }
+
+                override fun onCancelled(databaseError: DatabaseError) {
+                    Toast.makeText(this@ChatActivity, "Error al buscar el mensaje: ${databaseError.message}", Toast.LENGTH_SHORT).show()
+                }
+            })
+        }
+    }
+
 }
 

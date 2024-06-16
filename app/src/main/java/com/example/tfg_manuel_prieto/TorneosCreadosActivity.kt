@@ -5,6 +5,7 @@ import android.app.Notification
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.MenuItem
 import android.view.WindowInsetsAnimation
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -53,6 +54,16 @@ class TorneosCreadosActivity : AppCompatActivity() {
         recyclerViewTorneos.adapter = torneoAdapter
 
         cargarUsuarioYTorneos()
+
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == android.R.id.home) {
+            onBackPressed()
+            return true
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     private fun cargarUsuarioYTorneos() {

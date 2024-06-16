@@ -9,6 +9,25 @@
         android:layout_height="wrap_content"
         android:padding="16dp">
 
+        <ImageView
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:src="@drawable/sports_tournaments_logo"
+            android:layout_gravity="center"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="25dp"
+            android:scaleType="centerCrop" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="¡Crea una nueva cuenta!"
+            android:gravity="start"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:layout_margin="10dp"
+            android:layout_marginBottom="16dp"/>
+
         <EditText
             android:id="@+id/txtName"
             style="@style/viewCustom"
@@ -38,7 +57,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="75dp"
             android:orientation="horizontal"
             android:layout_marginBottom="16dp">
 
@@ -65,7 +84,7 @@
             style="@style/viewCustom"
             android:onClick="registrar"
             android:text="@string/create"
-            android:background="@color/colorBotonRegistro"
+            android:background="@drawable/rounded_button"
             android:textColor="@android:color/white"
             android:textStyle="bold"
             android:layout_width="match_parent"

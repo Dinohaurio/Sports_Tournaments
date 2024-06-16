@@ -3,6 +3,7 @@ package com.example.tfg_manuel_prieto
 import Torneo
 import android.content.Intent
 import android.os.Bundle
+import android.view.MenuItem
 import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.TextView
@@ -48,6 +49,16 @@ class TorneosParticipadosActivity : AppCompatActivity() {
         database = FirebaseDatabase.getInstance().reference
 
         fetchTorneosParticipados()
+
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == android.R.id.home) {
+            onBackPressed()
+            return true
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     private fun fetchTorneosParticipados() {
